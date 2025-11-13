@@ -1,8 +1,10 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Post
+from django.shortcuts import render, redirect, get_object_or_404 # Novos imports
+from django.contrib.auth.decorators import login_required # Novo import para restrição de acesso
 from django.utils import timezone # Para converter string em data se necessário, ou use parse_datetime
-from .forms import PostForm # Podemos reutilizar o form da versão 2 ou deixar o django gerar
+from .models import Post, Comment # Importar Comment
+from .forms import PostForm, CommentForm # Importar CommentForm
 
 class PostListView(ListView):
     model = Post
@@ -13,7 +15,31 @@ class PostListView(ListView):
 class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
-    # O DetailView já implementa o 404 automaticamente se não achar o ID
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Adiciona o formulário de comentários vazio ao contexto
+        context['comment_form'] = CommentForm() 
+        return context
+
+# NOVA VIEW FUNCIONAL: Lida com a submissão do formulário de comentários
+@login_required # O usuário precisa estar logado para comentar
+def add_comment_to_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            # Não salva no banco ainda (commit=False)
+            comment = form.save(commit=False)
+            comment.post = post          # Define o Post (chave estrangeira)
+            comment.author = request.user # Define o Autor (usuário logado)
+            comment.save()
+            # Redireciona para o detalhe do post após o sucesso
+            return redirect('post_detail', pk=post.pk)
+    
+    # Em caso de GET ou falha, apenas redireciona para a página de detalhes
+    return redirect('post_detail', pk=post.pk)
 
 class PostCreateView(CreateView):
     model = Post

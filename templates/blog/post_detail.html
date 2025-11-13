@@ -14,4 +14,34 @@
             <a href="{% url 'post_delete' post.pk %}" style="color: red;">Remover</a>
         </div>
     </article>
+
+    <hr>
+    <h3>Comentários ({{ post.comments.count }})</h3>
+    
+    {# post.comments.all() usa o related_name definido no model e já está ordenado por -created_date #}
+    {% for comment in post.comments.all %}
+        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+            <p><strong>{{ comment.author.username }}</strong> em 
+               {{ comment.created_date|date:"d/m/Y \à\s H:i" }}:</p>
+            <p>{{ comment.text }}</p>
+        </div>
+    {% empty %}
+        <p>Ainda não há comentários. Seja o primeiro a comentar!</p>
+    {% endfor %}
+
+    <hr>
+    <h4>Deixar um comentário</h4>
+    {% if user.is_authenticated %}
+        <form method="post" action="{% url 'add_comment_to_post' post.pk %}">
+            {% csrf_token %}
+            {# comment_form foi injetado pela PostDetailView #}
+            {{ comment_form.as_p }} 
+            <button type="submit">Enviar Comentário</button>
+        </form>
+    {% else %}
+        <p>Você precisa estar logado para comentar.
+        {# Um link simples para o login do admin é usado aqui, pois não implementamos um login frontend #}
+        <a href="{% url 'admin:login' %}?next={{ request.path }}">Faça o login</a>.</p>
+    {% endif %}
+
 {% endblock %}
