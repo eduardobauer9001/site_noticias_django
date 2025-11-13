@@ -5,6 +5,17 @@
         <h2>{{ post.title }}</h2>
         <p><em>Publicado em: {{ post.published_date|date:"d/m/Y \à\s H:i" }}</em></p>
         
+<!-- NOVO: Exibição de Categorias -->
+        <p>
+            <strong>Categorias:</strong>
+            {% for category in post.categories.all %}
+                <a href="{% url 'category_detail' category.pk %}">{{ category.name }}</a>
+                {% if not forloop.last %}, {% endif %}
+            {% empty %}
+                Nenhuma categoria definida.
+            {% endfor %}
+        </p>
+
         <div class="content">
             {{ post.content|safe }}
         </div>
@@ -14,6 +25,7 @@
             <a href="{% url 'post_delete' post.pk %}" style="color: red;">Remover</a>
         </div>
     </article>
+
 
     <hr>
     <h3>Comentários ({{ post.comments.count }})</h3>

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Posts em {{ category.name }}{% endblock %}
+
+{% block content %}
+    <h2>Posts na Categoria: {{ category.name }}</h2>
+    <p>{{ category.description }}</p>
+
+    <hr>
+    <h3>Notícias Recentes</h3>
+    <ul>
+        {% for post in posts %}
+            <li>
+                <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
+                <small>({{ post.published_date|date:"d/m/Y H:i" }})</small>
+            </li>
+        {% empty %}
+            <li>Nenhum post encontrado nesta categoria.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
