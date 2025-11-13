@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <article>
+        <h2>{{ post.title }}</h2>
+        <p><em>Publicado em: {{ post.published_date|date:"d/m/Y \à\s H:i" }}</em></p>
+        
+        <div class="content">
+            {{ post.content|safe }}
+        </div>
+
+        <div class="actions">
+            <a href="{% url 'post_update' post.pk %}">Editar</a>
+            <a href="{% url 'post_delete' post.pk %}" style="color: red;">Remover</a>
+        </div>
+    </article>
+{% endblock %}

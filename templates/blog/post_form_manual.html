@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{% if post %}Editar{% else %}Nova{% endif %} Notícia</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label>Título:</label><br>
+        <input type="text" name="title" value="{{ post.title|default:'' }}" required><br><br>
+        
+        <label>Conteúdo (HTML):</label><br>
+        <textarea name="content" rows="5" required>{{ post.content|default:'' }}</textarea><br><br>
+        
+        <label>Data (AAAA-MM-DD HH:MM):</label><br>
+        <!-- Input text simples para simular a falta de widgets do Django Form -->
+        <input type="datetime-local" name="published_date" value="{{ post.published_date|date:'Y-m-d\TH:i' }}" required><br><br>
+        
+        <button type="submit">Salvar</button>
+    </form>
+{% endblock %}

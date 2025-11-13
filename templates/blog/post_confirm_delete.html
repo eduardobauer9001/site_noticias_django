@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Confirmar Remoção</h2>
+    <p>Tem certeza que deseja apagar a notícia "{{ post.title }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" style="color: red;">Sim, apagar</button>
+        <a href="{% url 'post_detail' post.pk %}">Cancelar</a>
+    </form>
+{% endblock %}

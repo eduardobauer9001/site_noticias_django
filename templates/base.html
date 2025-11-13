@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Notícias Blog{% endblock %}</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        nav a { margin-right: 10px; text-decoration: none; color: blue; }
+        .actions { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="{% url 'post_list' %}">Notícias do Dia</a></h1>
+        <nav>
+            <a href="{% url 'post_list' %}">Início</a>
+            <a href="{% url 'post_create' %}">Nova Notícia</a>
+        </nav>
+        <hr>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>
