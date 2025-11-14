@@ -1,0 +1,1 @@
+web: gunicorn noticias_project.wsgi
