@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-1fo31_g!2=8dw$hpgqj_$hg45+4k_eyj@(zirv-@rugj_c6nss
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.render.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.render.com', 'site-noticias-django.onrender.com']
 
 
 # Application definition
